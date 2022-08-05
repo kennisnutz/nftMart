@@ -19,7 +19,7 @@ export default function Home() {
   }, []);
 
   async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_PROJECT_ID}`);
+    const provider = new ethers.providers.JsonRpcProvider();//`https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_PROJECT_ID}`
     const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider);
     const marketContract = new ethers.Contract(nftMarketAddress, Market.abi, provider);
 
@@ -39,16 +39,81 @@ export default function Home() {
         name: meta.data.name,
         description: meta.data.description,
       }
-      console.log(item);
+      return item;
     }));
-
-    return (
-      <div className={styles.container}>
-        <h1>Zep Mart</h1>
-
-
-
-      </div>
-    )
+    setNfts(items);
+    setLoadingState('loaded')
   }
+
+  if (loadingState === 'loaded' && !nfts.length) return (
+    <h1 className="px-20 py-10 text-3xl">No items in market place</h1>
+  )
+
+  async function buyNFT(nft) {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+
+    //create the signer object
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(nftMarketAddress, Market.abi, signer);
+
+    //set the price
+    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
+
+    //send the transaction
+    const transaction = await contract.createMarketSale(nftAddress, nft.tokenId, {
+      value: price
+    });
+    await transaction.wait();
+
+    loadNFTs()
+  }
+
+
+
+  return (
+    <div className="flex justify-center">
+      <div className='px-4' style={{ maxWidth: '1600px' }}>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4'>
+          {
+            nfts.map((nft, i) => (
+              <div key={i} className='border shadow rounded-xl overflow-hidden'>
+                <Image
+                  src={nft.image}
+                  alt="Picture of the author"
+                  width={500}
+                  height={500}
+                // blurDataURL="data:..." automatically provided
+                // placeholder="blur" // Optional blur-up while loading
+                />
+                <div className='p-4'>
+                  <p style={{ height: '64px' }} className='text-2xl font-semibold'>
+                    {nft.name}
+                  </p>
+                  <div style={{ height: '70px', overflow: 'hidden' }}>
+                    <p className='text-gray-400'>
+                      {nft.description}
+                    </p>
+                  </div>
+                  <div className='p-4 bg-black'>
+                    <p className='text-2xl mb-4 font-bold test-white'>
+                      {nft.price} HELEN
+                    </p>
+                    <button className='w-full bg-violet-500 text-white font-bold py-2 px-12 rounded'
+                      onClick={() => buyNFT(nft)}>Buy NFT</button>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+
+        </div>
+      </div>
+
+
+
+    </div>
+  )
 }
+

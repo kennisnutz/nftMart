@@ -11,6 +11,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.2",
     "axios": "^0.27.2",
+    "ipfs-http-client": "^57.0.3",
     "next": "12.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -31,7 +32,7 @@
     "eslint": "8.21.0",
     "eslint-config-next": "12.2.3",
     "ethers": "^5.4.7",
-    "hardhat": "^2.9.9",
+    "hardhat": "^2.10.1",
     "hardhat-gas-reporter": "^1.0.8",
     "postcss": "^8.4.14",
     "solidity-coverage": "^0.7.21",
