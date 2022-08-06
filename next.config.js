@@ -3,7 +3,7 @@ module.exports = {
   reactStrictMode: true,
   images: {
     domains: ['ipfs.infura.io'],
-    loader: 'akamai',
+    loader: 'imgix',
     path: '',
   },
   env: {
