@@ -1,5 +1,6 @@
 
 import styles from '../styles/Home.module.css'
+
 import React from 'react'
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
@@ -14,12 +15,13 @@ export default function Home() {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState('not-loaded');
 
+
   useEffect(() => {
     loadNFTs();
   }, []);
 
   async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider();//`https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_PROJECT_ID}`
+    const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mumbai.g.alchemy.com/v2/${process.env.projectId}`);
     const tokenContract = new ethers.Contract(nftAddress, NFT.abi, provider);
     const marketContract = new ethers.Contract(nftMarketAddress, Market.abi, provider);
 

@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-etherscan");
 
 const fs = require("fs")
 const privateKey = fs.readFileSync(".secret").toString();
@@ -22,6 +23,10 @@ module.exports = {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${projectId}`,
       accounts: [privateKey]
     },
+    // bscTestnet: {
+    //   url: `https://polygon-mainnet.g.alchemy.com/v2/${projectId}`,
+    //   accounts: [privateKey]
+    // }
 
     // eth: {
     //   url: `https://eth-mainnet.g.alchemy.com/v2/${projectId}`,
@@ -41,6 +46,14 @@ module.exports = {
     //   url: `https://polygon-mumbai.g.alchemy.com/v2/${projectId}`,
     //   accounts: []
     // }
+  },
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://etherscan.io/
+    apiKey: {
+      polygonMumbai: "UUM311KI8CQ73RCVE24K893SXSVDGGEWMK"
+
+    }
   },
   solidity: "0.8.9",
 };
